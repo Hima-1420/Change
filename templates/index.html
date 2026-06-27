@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+
+{% block title %}Core Face & ID Scan{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+    <!-- Scan Section -->
+    <div class="glass-card">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h2 style="font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+                <i data-feather="cpu" style="color: var(--accent);"></i> Biometric Scanning
+            </h2>
+            <span class="badge badge-safe">Neural Net Active</span>
+        </div>
+        
+        <div style="width: 100%; aspect-ratio: 16/9; background: #f8fafc; border-radius: 16px; position: relative; overflow: hidden; margin-bottom: 2rem; display: flex; align-items: center; justify-content: center; border: 2px dashed #cbd5e1; box-shadow: inset 0 0 20px rgba(0,0,0,0.02);">
+            <div id="scannerOverlay" style="position: absolute; top:0; left:0; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 20px 8px rgba(79, 70, 229, 0.4); z-index: 5; display: none;"></div>
+            
+            <div style="text-align: center; color: var(--accent); opacity: 0.8;">
+                <i data-feather="crosshair" style="width: 54px; height: 54px; margin-bottom: 15px; animation: pulse 2s infinite;"></i>
+                <p style="font-family: monospace; font-size: 1.1rem; letter-spacing: 2px; font-weight: 600;">WAITING FOR SUBJECT...</p>
+            </div>
+        </div>
+
+        <button class="btn btn-primary" style="width: 100%; height: 54px; border-radius: 14px; font-size: 1.05rem;" onclick="performScan()">
+            <i data-feather="maximize"></i> Initialize Retina Scan
+        </button>
+
+        <div id="scanResult" class="alert" style="margin-top: 1.5rem;"></div>
+    </div>
+
+    <!-- Check-in Section -->
+    <div class="glass-card">
+        <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="file-text" style="color: var(--accent);"></i> Identity Verification
+        </h2>
+        
+        <form id="checkInForm" onsubmit="handleCheckIn(event)">
+            <div class="form-group">
+                <label>Subject Full Name</label>
+                <input type="text" class="form-control" id="guestName" placeholder="e.g. John Doe" required>
+            </div>
+            
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+                <div>
+                    <label>Document Type</label>
+                    <select class="form-control" id="idType" required>
+                        <option value="Aadhaar">Aadhaar Card</option>
+                        <option value="PAN">PAN Card</option>
+                        <option value="Passport">Global Passport</option>
+                    </select>
+                </div>
+                <div>
+                    <label>UID / Document Number</label>
+                    <input type="text" class="form-control" id="idNumber" placeholder="XXXX-XXXX-XXXX" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label>Assigned Sector / Room</label>
+                <input type="text" class="form-control" id="roomNumber" placeholder="Sector 4, Room 102" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary" style="width: 100%; height: 54px; border-radius: 14px; font-size: 1.05rem; margin-top: 1.5rem;">
+                <i data-feather="shield"></i> Authenticate & Authorize
+            </button>
+        </form>
+
+        <div id="checkInResult" class="alert" style="margin-top: 1.5rem;"></div>
+    </div>
+</div>
+
+<style>
+@keyframes pulse { 0% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.6; transform: scale(1); } }
+@keyframes scanline { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+.scanning #scannerOverlay { display: block !important; animation: scanline 1.5s linear infinite; }
+</style>
+{% endblock %}

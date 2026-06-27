@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+{% block title %}System Data Logs{% endblock %}
+
+{% block content %}
+<div class="glass-card">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="terminal" style="color: var(--accent);"></i> Live System Interaction Logs
+        </h3>
+        <button class="btn btn-primary" style="padding: 10px 18px; font-size: 0.85rem; border-radius: 10px;" onclick="loadHistory()">
+            <i data-feather="refresh-cw" style="width: 16px; height: 16px;"></i> Force Sync
+        </button>
+    </div>
+    <div class="layout-inner-box" style="overflow-x: auto; min-height: 400px;">
+        <table id="logsTable">
+            <thead>
+                <tr>
+                    <th>Trace ID</th>
+                    <th>Operation Type</th>
+                    <th>Log Output Context</th>
+                    <th>Risk Classification</th>
+                    <th>Network Time</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="5" style="text-align: center; color: var(--text-secondary); padding: 3rem;"><i data-feather="loader" class="spin"></i> Querying master logs...</td></tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,166 @@
+{% extends 'base.html' %}
+
+{% block title %}Dashboard Overview{% endblock %}
+
+{% block content %}
+<!-- Cards Row -->
+<div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-bottom: 2rem;">
+    <!-- Total Visitors -->
+    <div class="glass-card" style="display: flex; align-items: center; gap: 15px;">
+        <div class="icon-container" style="background: rgba(59, 130, 246, 0.15); color: var(--accent);">
+            <i data-feather="users"></i>
+        </div>
+        <div style="flex: 1;">
+            <p class="stat-title">Total Visitors</p>
+            <h2 class="stat-value" id="stat-visitors">0</h2>
+        </div>
+    </div>
+    <!-- Active Guests -->
+    <div class="glass-card" style="display: flex; align-items: center; gap: 15px;">
+        <div class="icon-container" style="background: var(--success-light); color: var(--success);">
+            <i data-feather="check-circle" style="stroke-width: 2.5;"></i>
+        </div>
+        <div style="flex: 1;">
+            <p class="stat-title">Active Guests</p>
+            <h2 class="stat-value" id="stat-active" style="color: var(--success);">0</h2>
+        </div>
+    </div>
+    <!-- Total Alerts -->
+    <div class="glass-card" style="display: flex; align-items: center; gap: 15px;">
+        <div class="icon-container" style="background: var(--danger-light); color: var(--danger);">
+            <i data-feather="alert-triangle" style="stroke-width: 2.5;"></i>
+        </div>
+        <div style="flex: 1;">
+            <p class="stat-title">System Alerts</p>
+            <h2 class="stat-value" id="stat-threats" style="color: var(--danger);">0</h2>
+        </div>
+    </div>
+    <!-- Stolen ID Cases -->
+    <div class="glass-card" style="display: flex; align-items: center; gap: 15px;">
+        <div class="icon-container" style="background: var(--warning-light); color: var(--warning);">
+            <i data-feather="credit-card" style="stroke-width: 2.5;"></i>
+        </div>
+        <div style="flex: 1;">
+            <p class="stat-title">Stolen IDs</p>
+            <h2 class="stat-value" id="stat-stolen" style="color: var(--warning);">0</h2>
+        </div>
+    </div>
+</div>
+
+<!-- Quick Actions -->
+<div style="display: flex; gap: 1rem; margin-bottom: 2rem;">
+    <a href="/scan" class="btn btn-primary" style="flex: 1; padding: 15px; font-size: 1.1rem; display: flex; align-items: center; justify-content: center; gap: 10px; border-radius: 12px; background: linear-gradient(135deg, var(--accent), #3b82f6); color: white; text-decoration: none; box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3); transition: transform 0.2s, box-shadow 0.2s;">
+        <i data-feather="camera"></i> Access Face Recognition Module
+    </a>
+</div>
+
+<div style="display: grid; grid-template-columns: 2fr 1fr; gap: 2rem; margin-bottom: 2rem; align-items: stretch;">
+    <!-- Core Analytics Chart -->
+    <div class="glass-card" style="min-height: 400px; display: flex; flex-direction: column;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+                <i data-feather="bar-chart-2" style="color: var(--accent); background: rgba(59, 130, 246, 0.1); padding: 5px; border-radius: 10px;"></i> Traffic Flow
+            </h3>
+            <span class="badge badge-safe">Weekly View</span>
+        </div>
+        <div style="flex: 1; position: relative; padding-bottom: 10px;">
+            <canvas id="activityChart"></canvas>
+        </div>
+    </div>
+
+    <!-- Security Alerts Panel -->
+    <div class="glass-card" style="display: flex; flex-direction: column; overflow: hidden;">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+            <h3 style="font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+                <i data-feather="bell" style="color: var(--danger); background: var(--danger-light); padding: 5px; border-radius: 10px;"></i> Live Updates
+            </h3>
+        </div>
+        <div id="alertsPanel" style="flex: 1; overflow-y: auto; overflow-x: hidden; padding-right: 15px; display: flex; flex-direction: column; gap: 15px;">
+            <div style="text-align: center; color: var(--text-secondary); padding: 3rem; font-weight: 700;">
+                <i data-feather="loader" class="spin" style="margin-bottom: 10px; width: 32px; height: 32px;"></i><br>
+                Waiting for updates...
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Criminal Database Preview -->
+<div class="glass-card" style="margin-bottom: 2rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="user-x" style="color: var(--accent); background: rgba(59, 130, 246, 0.1); padding: 5px; border-radius: 10px;"></i> Criminal Database (Preview)
+        </h3>
+        <a href="/admin" class="btn btn-primary" style="padding: 8px 16px; font-size: 0.85rem;">View Full Database</a>
+    </div>
+    <div id="criminalPreviewGrid" class="criminal-grid">
+        <!-- Will be populated by JS -->
+        <div style="text-align: center; grid-column: 1 / -1; padding: 2rem;">Loading criminals...</div>
+    </div>
+</div>
+
+<!-- Recent Activity Box -->
+<div class="glass-card" style="margin-bottom: 1rem;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h3 style="font-size: 1.25rem; font-weight: 800; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="list" style="color: var(--success); background: var(--success-light); padding: 5px; border-radius: 10px;"></i> Activity Feed
+        </h3>
+        <button class="btn" style="background: #f1f5f9; color: var(--text-primary); padding: 8px 16px; font-size: 0.85rem;" onclick="initDashboard()">
+            <i data-feather="refresh-cw" style="width:16px; height:16px;"></i> Refresh Feed
+        </button>
+    </div>
+    <div class="layout-inner-box" style="overflow-x: auto; max-height: 400px; border: none;">
+        <table id="recentActivityTable">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Action</th>
+                    <th>Details</th>
+                    <th>Status</th>
+                    <th>Time</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
+</div>
+
+<script>
+// Expose a script to load criminal preview on the dashboard directly since this wasn't in main.js directly possibly
+document.addEventListener('DOMContentLoaded', () => {
+    fetch('/api/criminals')
+        .then(res => res.json())
+        .then(data => {
+            const grid = document.getElementById('criminalPreviewGrid');
+            if(data.length === 0) {
+                grid.innerHTML = '<div style="text-align: center; grid-column: 1 / -1; padding: 2rem; color: var(--text-secondary); font-weight: 700;">No records found.</div>';
+                return;
+            }
+            // Show only first 6 for preview
+            const previewData = data.slice(0, 6);
+            grid.innerHTML = previewData.map(c => `
+                <div class="criminal-card">
+                    <img src="${c.photo_url || 'https://via.placeholder.com/60'}" class="criminal-avatar" onerror="this.src='https://randomuser.me/api/portraits/lego/2.jpg'">
+                    <div class="criminal-info">
+                        <h4>${escapeHTML(c.name)}</h4>
+                        <p>${escapeHTML(c.crime_details).substring(0, 50)}${c.crime_details.length > 50 ? '...' : ''}</p>
+                    </div>
+                </div>
+            `).join('');
+        })
+        .catch(err => console.error(err));
+});
+
+function escapeHTML(str) {
+    if (!str) return '';
+    return str.replace(/[&<>'"]/g, 
+        tag => ({
+            '&': '&amp;',
+            '<': '&lt;',
+            '>': '&gt;',
+            "'": '&#39;',
+            '"': '&quot;'
+        }[tag] || tag)
+    );
+}
+</script>
+{% endblock %}

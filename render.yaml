@@ -1,0 +1,12 @@
+services:
+  - type: web
+    name: smart-hotel-security
+    env: python
+    plan: free
+    region: oregon
+    buildCommand: pip install -r requirements.txt
+    startCommand: gunicorn app:app --bind 0.0.0.0:$PORT --log-file -
+    envVars:
+      - key: SECRET_KEY
+        value: smart_hotel_secret
+    autoDeploy: true

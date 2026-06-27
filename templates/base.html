@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CivicGuard | Interactive Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://unpkg.com/feather-icons"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">
+            <i data-feather="smile" style="width: 32px; height: 32px;"></i> CivicGuard
+        </div>
+        <p style="color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 800; letter-spacing: 1px; margin-bottom: 1.5rem; padding-left: 10px;">Security & Management</p>
+        <nav class="nav-links">
+            <a href="/" class="nav-item {% if request.path == '/' %}active{% endif %}">
+                <i data-feather="grid"></i> General Dashboard
+            </a>
+            <a href="/scan" class="nav-item {% if request.path == '/scan' %}active{% endif %}">
+                <i data-feather="aperture"></i> Face Scan
+            </a>
+            <a href="/id_detection" class="nav-item {% if request.path == '/id_detection' %}active{% endif %}">
+                <i data-feather="credit-card"></i> Check ID
+            </a>
+            <a href="/visitors" class="nav-item {% if request.path == '/visitors' %}active{% endif %}">
+                <i data-feather="users"></i> Visitors Check
+            </a>
+            <a href="/history" class="nav-item {% if request.path == '/history' %}active{% endif %}">
+                <i data-feather="activity"></i> Logs & History
+            </a>
+            <hr style="border:0; border-top: 2px dashed #e2e8f0; margin: 15px 0;">
+            <a href="/admin" class="nav-item {% if request.path == '/admin' %}active{% endif %}">
+                <i data-feather="shield"></i> Admin Panel
+            </a>
+        </nav>
+        
+        <div style="margin-top: auto; padding: 20px; background: var(--success-light); border-radius: 20px; border: 1px solid rgba(16, 185, 129, 0.2);">
+            <p style="font-size: 0.8rem; font-weight: 800; color: var(--success); margin-bottom: 8px;">System Active</p>
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <div style="width: 12px; height: 12px; background: var(--success); border-radius: 50%; box-shadow: 0 0 12px var(--success);"></div>
+                <span style="font-size: 1rem; font-weight: 800; color: var(--text-primary);">All set & lively!</span>
+            </div>
+            <p style="font-size: 0.75rem; color: var(--text-secondary); margin-top: 10px; font-weight: 600;">Monitoring is active.</p>
+        </div>
+    </aside>
+
+    <main class="main-content">
+        <div class="header">
+            <h1 class="page-title">{% block title %}{% endblock %}</h1>
+            <div class="user-profile" style="display: flex; gap: 15px; align-items: center;">
+                <div style="text-align: right;">
+                    <p style="font-size: 1rem; font-weight: 800; color: var(--text-primary);">Hello, Admin 👋</p>
+                    <p style="font-size: 0.85rem; font-weight: 600; color: var(--text-secondary);">Ready for the day</p>
+                </div>
+                <!-- Profile picture with random lively avatar -->
+                <img src="https://randomuser.me/api/portraits/lego/1.jpg" style="width: 48px; height: 48px; border-radius: 16px; border: 3px solid #fff; box-shadow: 0 4px 10px rgba(0,0,0,0.1); object-fit: cover;">
+            </div>
+        </div>
+        
+        <div class="content animate-fade-in" style="width: 100%; max-width: 1400px; margin: 0 auto; padding-bottom: 2rem;">
+            {% block content %}{% endblock %}
+        </div>
+    </main>
+
+    <script>
+        feather.replace();
+    </script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>

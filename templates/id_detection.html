@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+
+{% block title %}Stolen ID Detection{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+    <h2 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+        <i data-feather="file-text" style="color: var(--accent);"></i> Real-time Document Verification
+    </h2>
+
+    <p style="color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem; line-height: 1.5; font-weight: 500;">This module validates identification credentials against the centralized Stolen/Lost Repositories. Unauthorized or compromised attempts are actively logged as high-risk vulnerabilities, and Intel units are instantly notified.</p>
+    
+    <form id="checkInForm" onsubmit="handleCheckIn(event)">
+        <div class="form-group">
+            <label>Subject Full Name</label>
+            <input type="text" class="form-control" id="guestName" placeholder="e.g. John Doe" required>
+        </div>
+        
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+            <div>
+                <label>Document Type</label>
+                <select class="form-control" id="idType" required>
+                    <option value="Aadhaar">Aadhaar Card</option>
+                    <option value="PAN">PAN Card</option>
+                    <option value="Passport">Global Passport</option>
+                </select>
+            </div>
+            <div>
+                <label>UID / Document Code</label>
+                <input type="text" class="form-control" id="idNumber" placeholder="XXXX-XXXX-XXXX" required>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label>Assigned Sector / Room</label>
+            <input type="text" class="form-control" id="roomNumber" placeholder="Sector 4, Room 102" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary" style="width: 100%; height: 54px; border-radius: 14px; font-size: 1.05rem; margin-top: 1.5rem;">
+            <i data-feather="shield"></i> Authenticate & Authorize
+        </button>
+    </form>
+
+    <div id="checkInResult" class="alert" style="margin-top: 1.5rem;"></div>
+</div>
+{% endblock %}

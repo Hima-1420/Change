@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+
+{% block title %}Security Admin Console{% endblock %}
+
+{% block content %}
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem;">
+    <!-- Criminal DB -->
+    <div class="glass-card">
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="target" style="color: var(--danger);"></i> Known Threat Intel
+        </h3>
+        
+        <form id="addCriminalForm" onsubmit="handleAddCriminal(event)" class="layout-inner-box" style="margin-bottom: 2.5rem; padding: 24px;">
+            <div class="form-group">
+                <label>Subject Alias</label>
+                <input type="text" id="criminalName" class="form-control" placeholder="Identify target" required>
+            </div>
+            <div class="form-group">
+                <label>Intel / Crime Details</label>
+                <input type="text" id="crimeDetails" class="form-control" placeholder="Specify violations" required>
+            </div>
+            <button type="submit" class="btn btn-danger" style="width: 100%; justify-content: center; height: 50px; border-radius: 12px; font-size: 1.05rem;">
+                <i data-feather="plus"></i> Register Threat
+            </button>
+        </form>
+
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">Current Active Targets</h4>
+        <div class="layout-inner-box" style="max-height: 350px; overflow-y: auto;">
+            <table id="criminalTable">
+                <thead>
+                    <tr>
+                        <th>Subject</th>
+                        <th>Intel Record</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+
+    <!-- Stolen ID DB -->
+    <div class="glass-card">
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1.5rem; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="credit-card" style="color: var(--warning);"></i> Invalidated Credentials
+        </h3>
+        
+        <form id="addStolenIdForm" onsubmit="handleAddStolenId(event)" class="layout-inner-box" style="margin-bottom: 2.5rem; padding: 24px;">
+            <div class="form-group" style="display: grid; grid-template-columns: 1fr 2fr; gap: 15px;">
+                <div>
+                    <label>Doc Type</label>
+                    <select id="stolenIdType" class="form-control" required>
+                        <option value="Aadhaar">Aadhaar</option>
+                        <option value="PAN">PAN</option>
+                        <option value="Passport">Passport</option>
+                    </select>
+                </div>
+                <div>
+                    <label>Doc Number</label>
+                    <input type="text" id="stolenIdNumber" class="form-control" placeholder="Enter ID UID" required>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center; background: linear-gradient(135deg, var(--warning), #d97706); height: 50px; border-radius: 12px; font-size: 1.05rem; box-shadow: 0 4px 15px rgba(245, 158, 11, 0.2);">
+                <i data-feather="lock"></i> Invalidate Document
+            </button>
+        </form>
+        <div id="stolenIdMsg" style="margin-bottom: 1.5rem;"></div>
+
+        <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-secondary); text-transform: uppercase; letter-spacing: 1px;">Repository Register</h4>
+        <div class="layout-inner-box" style="max-height: 350px; overflow-y: auto;">
+            <table id="stolenIdTable">
+                <thead>
+                    <tr>
+                        <th>Type</th>
+                        <th>UID Sequence</th>
+                        <th>Logged Date</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

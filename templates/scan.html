@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% block title %}Face Recognition Module{% endblock %}
+
+{% block content %}
+<div class="glass-card" style="max-width: 800px; margin: 0 auto;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1.5rem;">
+        <h2 style="font-size: 1.4rem; font-weight: 700; display: flex; align-items: center; gap: 10px; color: var(--text-primary);">
+            <i data-feather="camera" style="color: var(--accent);"></i> Identity Verification
+        </h2>
+        <span class="badge badge-safe">Threat DB Integration</span>
+    </div>
+    
+    <div style="width: 100%; aspect-ratio: 16/9; background: #f8fafc; border-radius: 16px; position: relative; overflow: hidden; margin-bottom: 1.5rem; display: flex; align-items: center; justify-content: center; border: 2px dashed #cbd5e1; box-shadow: inset 0 0 20px rgba(0,0,0,0.02);" id="mediaContainer">
+        
+        <!-- Video element for webcam preview -->
+        <video id="webcamVideo" autoplay playsinline style="width: 100%; height: 100%; object-fit: cover; display: none;"></video>
+        <!-- Canvas to temporarily capture frames -->
+        <canvas id="photoCanvas" style="display: none;"></canvas>
+        <!-- Image overlay for previewing uploaded or captured content -->
+        <img id="imagePreview" src="" style="width: 100%; height: 100%; object-fit: cover; display: none; z-index: 2;">
+
+        <div id="scannerOverlay" style="position: absolute; top:0; left:0; width: 100%; height: 3px; background: linear-gradient(90deg, transparent, var(--accent), transparent); box-shadow: 0 0 20px 8px rgba(79, 70, 229, 0.4); z-index: 5; display: none;"></div>
+        
+        <div id="mediaPlaceholder" style="text-align: center; color: var(--accent); opacity: 0.8; z-index: 1;">
+            <i data-feather="image" style="width: 54px; height: 54px; margin-bottom: 15px; animation: pulse 2s infinite;"></i>
+            <p style="font-family: monospace; font-size: 1.1rem; letter-spacing: 2px; font-weight: 600;">AWAITING IMAGE SOURCE</p>
+        </div>
+    </div>
+
+    <div style="display: flex; gap: 10px; margin-bottom: 1rem;">
+        <button id="btnStartCamera" class="btn btn-primary" style="flex: 1; height: 50px; border-radius: 12px; font-size: 1rem;" onclick="startWebcam()">
+            <i data-feather="video"></i> Start Camera
+        </button>
+        <button id="btnCapture" class="btn btn-success" style="flex: 1; height: 50px; border-radius: 12px; font-size: 1rem; display: none;" onclick="captureImage()">
+            <i data-feather="aperture"></i> Capture & Match
+        </button>
+        
+        <!-- Hidden file input -->
+        <input type="file" id="imageUploadInput" accept="image/png, image/jpeg" style="display: none;" onchange="handleImageUpload(event)">
+        
+        <button id="btnUploadImage" class="btn" style="flex: 1; height: 50px; border-radius: 12px; font-size: 1rem; background: var(--bg-alt); color: var(--text-primary); border: 1px solid #cbd5e1;" onclick="document.getElementById('imageUploadInput').click()">
+            <i data-feather="upload-cloud"></i> Upload Image
+        </button>
+    </div>
+
+    <div id="scanResult" class="alert" style="margin-top: 1.5rem; display: none;"></div>
+</div>
+
+<style>
+@keyframes pulse { 0% { opacity: 0.6; transform: scale(1); } 50% { opacity: 1; transform: scale(1.05); } 100% { opacity: 0.6; transform: scale(1); } }
+@keyframes scanline { 0% { top: 0; } 50% { top: 100%; } 100% { top: 0; } }
+.scanning #scannerOverlay { display: block !important; animation: scanline 1.5s linear infinite; }
+</style>
+{% endblock %}
