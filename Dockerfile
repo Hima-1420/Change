@@ -14,4 +14,4 @@ COPY . .
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "gunicorn app:app --bind 0.0.0.0:${PORT:-8000} --log-file -"]
+CMD ["python", "-m", "gunicorn", "app:app", "--bind", "0.0.0.0:8000", "--log-file", "-"]
