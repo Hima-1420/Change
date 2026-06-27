@@ -7,6 +7,18 @@ import os
 app = Flask(__name__)
 app.config['SECRET_KEY'] = 'smart_hotel_secret'
 
+
+def get_port():
+    raw_port = os.environ.get('PORT', '5000')
+    if not raw_port:
+        return 5000
+
+    try:
+        return int(raw_port)
+    except (TypeError, ValueError):
+        return 5000
+
+
 # Initialize Database
 with app.app_context():
     init_db(app)
@@ -188,5 +200,5 @@ if __name__ == '__main__':
     os.makedirs('templates', exist_ok=True)
     os.makedirs('static/css', exist_ok=True)
     os.makedirs('static/js', exist_ok=True)
-    
-    app.run(debug=False, host='0.0.0.0', port=int(os.environ.get('PORT', 5000)))
+
+    app.run(debug=False, host='0.0.0.0', port=get_port())
